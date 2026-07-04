@@ -234,18 +234,12 @@ export default function Home() {
           <p className="text-stone-200 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
             As a local grassroots organization, over 90% of our funding goes directly back into buying local forest tracts, restoring salmon spawning beds, and organizing river clean-ups.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <div className="flex justify-center pt-4">
             <Link
               href="/get-involved"
               className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-accent hover:bg-accent-hover text-white px-8 py-3.5 rounded-full text-sm font-bold transition-all duration-300 hover:shadow-lg"
             >
               <span>Donate Locally</span>
-            </Link>
-            <Link
-              href="/get-involved"
-              className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-8 py-3.5 rounded-full text-sm font-bold transition-all duration-300"
-            >
-              <span>Join As A Volunteer</span>
             </Link>
           </div>
         </div>

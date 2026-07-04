@@ -111,3 +111,18 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Scan line animation for QR widget */
+@keyframes scan {
+  0%, 100% {
+    top: 5%;
+  }
+  50% {
+    top: 95%;
+  }
+}
+
+.animate-scan {
+  animation: scan 3.5s ease-in-out infinite;
+}
+

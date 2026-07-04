@@ -2,24 +2,11 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Heart, User, Check, Sparkles, Smile } from "lucide-react";
+import { Heart, Check, Sparkles, QrCode } from "lucide-react";
 
 export default function GetInvolved() {
-  // Donation States
-  const [frequency, setFrequency] = useState<"one-time" | "monthly">("monthly");
-  const [selectedTier, setSelectedTier] = useState<number | null>(45);
-  const [customAmount, setCustomAmount] = useState<string>("");
-  const [checkoutStep, setCheckoutStep] = useState<"form" | "processing" | "success">("form");
-  
-  // Volunteer States
-  const [volunteerSubmitted, setVolunteerSubmitted] = useState(false);
-  const [volunteerName, setVolunteerName] = useState("");
-
-  const donationTiers = [
-    { amount: 15, label: "Sow Native Seed Mix", description: "Purchases a native grass and wildflower seed mix to cover 200 sq. feet of fire burn scar." },
-    { amount: 45, label: "Plant 10 Streamside Trees", description: "Buys 10 redwood or alder saplings, soil bags, and guards for stream shade." },
-    { amount: 120, label: "Equip a Watershed Volunteer", description: "Provides high-grade waders, clean-up tools, and water monitors for stream surveys." },
-  ];
+  // Mascot Adoption State
+  const [selectedMascot, setSelectedMascot] = useState<{ name: string; species: string } | null>(null);
 
   const mascots = [
     { name: "Rusty", species: "River Otter", description: "Playful waters. Otis loves clean gravel beds and shaded pools.", image: "/images/project_reef.png" },
@@ -27,36 +14,6 @@ export default function GetInvolved() {
     { name: "Finley", species: "Chinook Salmon", description: "Waterways. Finley returns to spawn in Emerald River.", image: "/images/project_leopard.png" },
   ];
 
-  const handleCustomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCustomAmount(e.target.value);
-    setSelectedTier(null);
-  };
-
-  const handleTierSelect = (amount: number) => {
-    setSelectedTier(amount);
-    setCustomAmount("");
-  };
-
-  const handleDonateSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setCheckoutStep("processing");
-    setTimeout(() => {
-      setCheckoutStep("success");
-    }, 2000);
-  };
-
-  const handleVolunteerSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (volunteerName.trim()) {
-      setVolunteerSubmitted(true);
-      setTimeout(() => {
-        setVolunteerSubmitted(false);
-        setVolunteerName("");
-      }, 6000);
-    }
-  };
-
-  const currentAmount = selectedTier !== null ? selectedTier : parseFloat(customAmount) || 0;
 
   return (
     <div className="relative min-h-screen">
@@ -80,7 +37,7 @@ export default function GetInvolved() {
             Ways to Help WHT
           </h1>
           <p className="text-stone-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            Support with a recurring gift, adopt a local wildlife mascot, or volunteer for hands-on creek cleanups.
+            Support WHT with a direct donation or adopt a local wildlife mascot.
           </p>
         </div>
       </section>
@@ -89,141 +46,85 @@ export default function GetInvolved() {
       <section className="py-16 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
           
-          {/* Donation Form Widget */}
-          <div className="lg:col-span-7 bg-card border border-card-border rounded-2xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
-            {checkoutStep === "form" && (
-              <form onSubmit={handleDonateSubmit} className="space-y-6">
-                <div>
-                  <h2 className="font-serif text-2xl font-bold text-primary dark:text-primary-light">
-                    Direct Conservation Donation
-                  </h2>
-                  <p className="text-xs text-muted mt-1">
-                    Your contribution directly purchases local redwood parcels and spawns river gravel structures.
-                  </p>
-                </div>
+          {/* QR Code Donation Widget */}
+          <div id="donation-section" className="lg:col-span-7 bg-card border border-card-border rounded-2xl p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6">
+            <div className="space-y-4">
+              <div>
+                <h2 className="font-serif text-2xl font-bold text-primary dark:text-primary-light flex items-center gap-2">
+                  <QrCode className="h-6 w-6 text-accent" />
+                  <span>Scan to Donate</span>
+                </h2>
+                <p className="text-xs text-muted mt-1">
+                  As a local grassroots NGO, we keep giving direct. Scan the code to fund woodlots and watershed restoration.
+                </p>
+              </div>
 
-                {/* Toggle Frequency */}
-                <div className="grid grid-cols-2 gap-2 bg-muted-light rounded-lg p-1 text-xs font-bold">
-                  <button
-                    type="button"
-                    onClick={() => setFrequency("monthly")}
-                    className={`py-2 rounded-md transition-all ${
-                      frequency === "monthly" ? "bg-primary text-white shadow" : "text-foreground hover:bg-stone-200 dark:hover:bg-slate-700"
-                    }`}
-                  >
-                    Monthly (Recommended)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setFrequency("one-time")}
-                    className={`py-2 rounded-md transition-all ${
-                      frequency === "one-time" ? "bg-primary text-white shadow" : "text-foreground hover:bg-stone-200 dark:hover:bg-slate-700"
-                    }`}
-                  >
-                    One-Time Gift
-                  </button>
-                </div>
-
-                {/* Tiers Grid */}
-                <div className="space-y-3">
-                  <label className="text-xs font-bold text-foreground block uppercase tracking-wider">
-                    Select a Donation Impact:
-                  </label>
-                  <div className="grid grid-cols-1 gap-3">
-                    {donationTiers.map((tier) => (
-                      <button
-                        key={tier.amount}
-                        type="button"
-                        onClick={() => handleTierSelect(tier.amount)}
-                        className={`w-full text-left p-4 rounded-xl border transition-all duration-300 flex items-start space-x-4 ${
-                          selectedTier === tier.amount
-                            ? "border-primary bg-primary/5 dark:border-primary-light dark:bg-primary-light/5 scale-[1.01]"
-                            : "border-card-border hover:bg-muted-light"
-                        }`}
-                      >
-                        <div className={`p-2.5 rounded-full text-white font-mono text-sm font-bold shrink-0 ${
-                          selectedTier === tier.amount ? "bg-primary" : "bg-muted"
-                        }`}>
-                          ${tier.amount}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <h4 className="font-serif font-bold text-foreground text-sm">{tier.label}</h4>
-                          <p className="text-xs text-muted leading-relaxed mt-1">{tier.description}</p>
-                        </div>
-                      </button>
-                    ))}
+              {/* Dynamic Mascot Banner */}
+              {selectedMascot && (
+                <div className="bg-primary/5 dark:bg-primary-light/5 border border-primary/20 dark:border-primary-light/20 text-foreground rounded-xl p-4 flex items-center justify-between text-xs animate-fade-in">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-accent/20 rounded-full text-accent shrink-0 animate-pulse">
+                      <Sparkles className="h-4 w-4" />
+                    </div>
+                    <span>
+                      Adopting <strong>{selectedMascot.name} ({selectedMascot.species})</strong>! Scan the QR code to contribute <strong>$35</strong>.
+                    </span>
                   </div>
+                  <button
+                    onClick={() => setSelectedMascot(null)}
+                    className="text-muted hover:text-foreground font-bold ml-2 text-lg leading-none"
+                    aria-label="Clear mascot selection"
+                  >
+                    &times;
+                  </button>
                 </div>
+              )}
 
-                {/* Custom Amount */}
-                <div className="space-y-2">
-                  <label htmlFor="custom-amt" className="text-xs font-bold text-foreground block uppercase tracking-wider">
-                    Or Enter Custom Amount ($):
-                  </label>
-                  <input
-                    id="custom-amt"
-                    type="number"
-                    min="5"
-                    placeholder="Enter custom dollar amount"
-                    value={customAmount}
-                    onChange={handleCustomChange}
-                    className="w-full bg-muted-light border border-card-border rounded-xl py-3 px-4 text-sm text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+              {/* QR Code Display Container */}
+              <div className="flex flex-col items-center justify-center p-6 bg-muted-light/40 border border-card-border/60 rounded-xl relative group overflow-hidden">
+                {/* Scanner decorative corners */}
+                <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-primary/40 dark:border-primary-light/40 group-hover:border-accent transition-colors" />
+                <div className="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2 border-primary/40 dark:border-primary-light/40 group-hover:border-accent transition-colors" />
+                <div className="absolute bottom-4 left-4 w-4 h-4 border-b-2 border-l-2 border-primary/40 dark:border-primary-light/40 group-hover:border-accent transition-colors" />
+                <div className="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2 border-primary/40 dark:border-primary-light/40 group-hover:border-accent transition-colors" />
+
+                {/* QR Code Image */}
+                <div className="relative w-48 h-48 sm:w-56 sm:h-56 bg-white p-3 rounded-lg shadow-inner transition-transform duration-300 group-hover:scale-[1.02]">
+                  <Image
+                    src="/images/donation_qr_code.png"
+                    alt="Scan to Donate QR Code"
+                    fill
+                    className="object-contain"
                   />
+                  {/* Subtle scan active line */}
+                  <div className="absolute left-0 right-0 h-0.5 bg-accent/50 animate-scan z-10" />
                 </div>
 
-                {/* Payment Checkout Info */}
-                <div className="bg-muted-light/60 p-4 rounded-xl space-y-3 text-xs border border-card-border/60">
-                  <div className="flex items-center space-x-2 font-bold text-foreground">
-                    <Heart className="h-4 w-4 text-accent" />
-                    <span>Transaction Total: ${currentAmount} {frequency === "monthly" ? "/ Month" : ""}</span>
-                  </div>
-                  <p className="text-muted leading-relaxed">
-                    This simulates a checkout transaction. WHT processes contributions securely through encrypted networks.
-                  </p>
+                <div className="mt-4 text-center space-y-1">
+                  <p className="text-xs font-bold text-foreground">Scan with your banking or payment app</p>
+                  <p className="text-[10px] text-muted">Supports Venmo, PayPal, Cash App, Zelle, or credit wallets</p>
                 </div>
-
-                <button
-                  type="submit"
-                  disabled={currentAmount <= 0}
-                  className="w-full justify-center inline-flex items-center space-x-2 bg-accent hover:bg-accent-hover disabled:bg-stone-300 text-white font-bold py-3.5 px-6 rounded-full transition-all duration-300 shadow-md"
-                >
-                  <Heart className="h-5 w-5 fill-current" />
-                  <span>Submit Donation</span>
-                </button>
-              </form>
-            )}
-
-            {checkoutStep === "processing" && (
-              <div className="h-full min-h-[300px] flex flex-col justify-center items-center space-y-4 text-center">
-                <div className="h-10 w-10 border-4 border-accent border-t-transparent rounded-full animate-spin" />
-                <h3 className="font-serif font-bold text-lg text-foreground">Processing Secure Donation</h3>
-                <p className="text-xs text-muted max-w-xs">
-                  Connecting to payment vault. Thank you for protecting the watersheds.
-                </p>
               </div>
-            )}
 
-            {checkoutStep === "success" && (
-              <div className="h-full min-h-[350px] flex flex-col justify-center items-center space-y-5 text-center animate-fade-in">
-                <div className="p-4 bg-emerald-100 dark:bg-emerald-950/30 text-emerald-600 rounded-full">
-                  <Sparkles className="h-8 w-8" />
-                </div>
-                <h3 className="font-serif font-bold text-2xl text-primary dark:text-primary-light">Thank You for Your Support!</h3>
-                <p className="text-sm text-foreground/80 max-w-md leading-relaxed">
-                  Your mock donation of <strong>${currentAmount} {frequency === "monthly" ? "monthly" : "one-time"}</strong> has been logged. In a production environment, this would fund redwood forestry and anti-poaching measures.
-                </p>
-                <button
-                  onClick={() => {
-                    setCheckoutStep("form");
-                    setSelectedTier(45);
-                    setCustomAmount("");
-                  }}
-                  className="bg-primary text-white text-xs font-bold px-5 py-2.5 rounded-full hover:bg-primary-hover transition-colors"
-                >
-                  Make another contribution
-                </button>
+              {/* How to Donate Instructions */}
+              <div className="space-y-3">
+                <h3 className="text-xs font-bold text-foreground uppercase tracking-wider">How to complete your gift:</h3>
+                <ol className="text-xs text-muted space-y-2 list-decimal list-inside pl-1">
+                  <li>Open your preferred mobile banking, camera, or payment app.</li>
+                  <li>Focus your lens on the QR code until the donation link is detected.</li>
+                  <li>Enter your contribution amount (e.g. <strong>$35</strong> for mascot adoption) and complete the secure transfer.</li>
+                </ol>
               </div>
-            )}
+            </div>
+
+            {/* Donation impact breakdown */}
+            <div className="border-t border-card-border/60 pt-4 mt-4 text-[11px] text-muted flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+              <span className="flex items-center gap-1.5 font-medium text-foreground">
+                <Heart className="h-3.5 w-3.5 text-accent fill-current" />
+                100% of QR funds go to local ecosystems
+              </span>
+              <span>Need help? <a href="/contact" className="underline text-primary dark:text-primary-light hover:text-accent">Contact us</a></span>
+            </div>
           </div>
 
           {/* Right Side: Trust & Direct Impact FAQ Card */}
@@ -308,9 +209,11 @@ export default function GetInvolved() {
                   </div>
                   <button
                     onClick={() => {
-                      setSelectedTier(null);
-                      setCustomAmount("35");
-                      window.scrollTo({ top: 400, behavior: "smooth" });
+                      setSelectedMascot({ name: mascot.name, species: mascot.species });
+                      const element = document.getElementById("donation-section");
+                      if (element) {
+                        element.scrollIntoView({ behavior: "smooth" });
+                      }
                     }}
                     className="w-full text-center py-2 bg-primary/10 hover:bg-primary text-primary hover:text-white font-bold text-xs rounded-lg transition-colors duration-300"
                   >
@@ -320,92 +223,6 @@ export default function GetInvolved() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* 4. Volunteer Form Section */}
-      <section className="py-20 max-w-3xl mx-auto px-4 sm:px-6 space-y-12">
-        <div className="text-center space-y-3">
-          <span className="text-xs font-bold text-accent uppercase tracking-widest bg-accent/10 px-3 py-1 rounded-full">
-            Hands-on Help
-          </span>
-          <h2 className="font-serif text-3xl font-bold text-primary dark:text-primary-light">
-            Become a Watershed volunteer
-          </h2>
-          <p className="text-xs sm:text-sm text-muted">
-            We hold volunteer field days every second Saturday of the month.
-          </p>
-        </div>
-
-        <div className="bg-card border border-card-border rounded-2xl p-6 sm:p-8 shadow-sm">
-          {volunteerSubmitted ? (
-            <div className="text-center py-8 space-y-4 animate-fade-in">
-              <div className="inline-flex p-3.5 bg-green-100 text-green-600 rounded-full">
-                <Smile className="h-6 w-6" />
-              </div>
-              <h3 className="font-serif font-bold text-xl text-primary">Inquiry Registered!</h3>
-              <p className="text-sm text-foreground/80 max-w-sm mx-auto leading-relaxed">
-                Thank you for applying. A coordinator will email you instructions and safety sheets for the next creek planting session.
-              </p>
-            </div>
-          ) : (
-            <form onSubmit={handleVolunteerSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="space-y-1.5">
-                  <label htmlFor="vol-name" className="text-xs font-bold text-foreground block">First & Last Name:</label>
-                  <input
-                    id="vol-name"
-                    required
-                    type="text"
-                    placeholder="Enter your name"
-                    value={volunteerName}
-                    onChange={(e) => setVolunteerName(e.target.value)}
-                    className="w-full bg-muted-light border border-card-border rounded-xl py-2.5 px-3 text-sm text-foreground focus:outline-none focus:border-primary"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label htmlFor="vol-email" className="text-xs font-bold text-foreground block">Email Address:</label>
-                  <input
-                    id="vol-email"
-                    required
-                    type="email"
-                    placeholder="name@example.com"
-                    className="w-full bg-muted-light border border-card-border rounded-xl py-2.5 px-3 text-sm text-foreground focus:outline-none focus:border-primary"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <label className="text-xs font-bold text-foreground block">Preferred Volunteer Roles (Select all):</label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                  <label className="flex items-center space-x-2 border border-card-border rounded-lg p-3 hover:bg-muted-light cursor-pointer">
-                    <input type="checkbox" className="rounded text-primary focus:ring-primary shrink-0" defaultChecked />
-                    <span>Creek cleanups & trash removal</span>
-                  </label>
-                  <label className="flex items-center space-x-2 border border-card-border rounded-lg p-3 hover:bg-muted-light cursor-pointer">
-                    <input type="checkbox" className="rounded text-primary focus:ring-primary shrink-0" defaultChecked />
-                    <span>Redwood/sapling tree planting</span>
-                  </label>
-                  <label className="flex items-center space-x-2 border border-card-border rounded-lg p-3 hover:bg-muted-light cursor-pointer">
-                    <input type="checkbox" className="rounded text-primary focus:ring-primary shrink-0" />
-                    <span>Trail maintenance & weeds weeding</span>
-                  </label>
-                  <label className="flex items-center space-x-2 border border-card-border rounded-lg p-3 hover:bg-muted-light cursor-pointer">
-                    <input type="checkbox" className="rounded text-primary focus:ring-primary shrink-0" />
-                    <span>Citizen science bird/salmon counts</span>
-                  </label>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full justify-center inline-flex items-center space-x-2 bg-primary hover:bg-primary-hover text-white font-bold py-3 px-6 rounded-full transition-colors duration-300 shadow"
-              >
-                <User className="h-4 w-4" />
-                <span>Register as a Volunteer</span>
-              </button>
-            </form>
-          )}
         </div>
       </section>
     </div>
