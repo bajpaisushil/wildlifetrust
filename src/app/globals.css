@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #064e3b;
+  --color-primary-hover: #022c22;
+  --color-primary-light: #10b981;
+  --color-primary-extralight: #d1fae5;
+  
+  --color-accent: #d97706;
+  --color-accent-hover: #b45309;
+  --color-accent-light: #f59e0b;
+  
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-serif), Georgia, serif;
+}
+
+:root {
+  --background: #fafaf9;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-border: #e7e5e4;
+  --muted: #6b7280;
+  --muted-light: #f3f4f6;
+  --glow-color: rgba(6, 78, 59, 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #090d16;
+    --foreground: #f8fafc;
+    --card: #111827;
+    --card-border: #1f2937;
+    --muted: #9ca3af;
+    --muted-light: #1f2937;
+    --glow-color: rgba(16, 185, 129, 0.15);
+  }
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* Glassmorphism Utilities */
+.glass-header {
+  background: rgba(250, 250, 249, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(231, 229, 228, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  .glass-header {
+    background: rgba(9, 13, 22, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(31, 41, 55, 0.5);
+  }
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(231, 229, 228, 0.6);
+}
+
+@media (prefers-color-scheme: dark) {
+  .glass-card {
+    background: rgba(17, 24, 39, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(31, 41, 55, 0.6);
+  }
+}
+
+/* Page transitions & premium animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+/* Hide scrollbar but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
