@@ -1,249 +1,252 @@
-import Image from "next/image";
 import Link from "next/link";
-import { Trees, Compass, Users, Map, Heart, ArrowRight, ShieldCheck, Leaf } from "lucide-react";
-import InteractiveMap from "@/components/InteractiveMap";
+import { ArrowRight, HeartHandshake, Phone } from "lucide-react";
+import CopyUpi from "@/components/CopyUpi";
+import FloatingBadge from "@/components/FloatingBadge";
+import Foliage from "@/components/Foliage";
+import ReelEmbed from "@/components/ReelEmbed";
+import Reveal from "@/components/Reveal";
+import SectionHeading from "@/components/SectionHeading";
+import ShelterGrid from "@/components/ShelterGrid";
+import WhatsAppIcon from "@/components/WhatsAppIcon";
+import { animals, reels, shelterRooms, site, steps, whatsappUrl } from "@/data/site";
+
+const reasons = [
+  {
+    emoji: "⚡",
+    title: "Animals are getting hurt",
+    text: "As Delhi grows, more monkeys, owls, snakes and birds are injured by live wires, kite string, traffic and dogs.",
+  },
+  {
+    emoji: "🤲",
+    title: "They have nowhere to go",
+    text: "Most injured wild animals are ignored or chased away. A quick, local response is often the difference between life and death.",
+  },
+  {
+    emoji: "🌳",
+    title: "They belong in the wild",
+    text: "We don't keep animals as pets or for show. The goal is always to heal them and let them go back home.",
+  },
+];
+
+const featuredReel = reels.find((r) => r.author === site.instagramHandle) ?? reels[0];
+
+const arrowLink = "group inline-flex items-center gap-1 font-semibold text-leaf";
 
 export default function Home() {
-  const stats = [
-    { value: "2,850+", label: "Acres Protected", icon: Trees },
-    { value: "15+ mi", label: "Salmon Watershed Restored", icon: Compass },
-    { value: "1,200+", label: "Local Volunteers", icon: Users },
-    { value: "3", label: "Active Preserves", icon: Map },
-  ];
-
-  const highlights = [
-    {
-      title: "Reforesting Fire Burn Scars",
-      description: "Restoring the local ridge ecosystems damaged by recent wildland fires by planting 5,000+ native saplings including redwoods and douglas firs.",
-      image: "/images/hero_forest.png", // Fallback to our generated asset
-      category: "Forest Ecology",
-    },
-    {
-      title: "Salmon Spawning Bed Protection",
-      description: "Constructing protective structures and planting streamside trees along the Emerald River to reduce temperature and run-off sedimentation.",
-      image: "/images/project_reef.png", // Will use reef as placeholder if they change, but path is set
-      category: "Riparian Restorations",
-    },
-    {
-      title: "Urban Wildlife Corridors",
-      description: "Educating local communities on bear-safe containment and building green fences to ensure safe animal migration around roadways.",
-      image: "/images/project_leopard.png",
-      category: "Community Conservation",
-    },
-  ];
-
   return (
-    <div className="relative overflow-hidden">
-      {/* 1. Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center pt-24 pb-16 bg-emerald-950 text-white">
-        {/* Background Image with overlay */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/hero_forest.png"
-            alt="Misty redwood forest conservation"
-            fill
-            priority
-            className="object-cover opacity-35 object-center"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-emerald-950/80 to-emerald-950/40" />
-        </div>
+    <>
+      <section className="relative overflow-hidden bg-hero text-white">
+        <Foliage className="text-[#9fd49a]" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8 animate-fade-in">
-          <div className="inline-flex items-center space-x-2 bg-accent/20 text-accent-light px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase border border-accent/30">
-            <Leaf className="h-3.5 w-3.5" />
-            <span>Emerald Valley Conservation Trust</span>
-          </div>
-
-          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight max-w-4xl mx-auto leading-[1.15]">
-            Protecting the Wild Spaces of Our Local Community
-          </h1>
-
-          <p className="text-stone-200 text-base sm:text-lg lg:text-xl max-w-2xl mx-auto font-normal leading-relaxed">
-            We are a dedicated local NGO conserving regional redwood forests, restoring critical salmon spawning watersheds, and building safe wildlife pathways in the Emerald Valley.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <Link
-              href="/get-involved"
-              className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-accent hover:bg-accent-hover text-white px-8 py-3.5 rounded-full text-base font-semibold transition-all duration-300 hover:shadow-lg hover:scale-102"
-            >
-              <Heart className="h-5 w-5 fill-current" />
-              <span>Support Our Trust</span>
-            </Link>
-            <Link
-              href="/projects"
-              className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 px-8 py-3.5 rounded-full text-base font-semibold transition-all duration-300 backdrop-blur-sm"
-            >
-              <span>Explore Projects</span>
-              <ArrowRight className="h-5 w-5" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 2. Metrics / Stats Bar */}
-      <section className="relative z-20 -mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 bg-card rounded-2xl shadow-xl border border-card-border p-6 md:p-8">
-          {stats.map((stat) => {
-            const Icon = stat.icon;
-            return (
-              <div key={stat.label} className="text-center p-4 space-y-2 border-r last:border-r-0 border-card-border/60 max-lg:odd:border-r-0 max-sm:border-r-0 max-sm:border-b last:border-b-0 max-sm:pb-4 max-sm:pt-2">
-                <div className="inline-flex p-2.5 bg-primary/10 rounded-full text-primary dark:text-primary-light">
-                  <Icon className="h-5 w-5" />
-                </div>
-                <div className="font-serif text-2xl md:text-3xl font-extrabold text-foreground">
-                  {stat.value}
-                </div>
-                <div className="text-xs font-semibold text-muted tracking-wide uppercase">
-                  {stat.label}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* 3. Core Mission Section */}
-      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-5 space-y-6">
-            <span className="text-xs font-bold text-accent uppercase tracking-widest bg-accent/10 px-3 py-1 rounded-full">
-              Who We Are
-            </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-primary dark:text-primary-light leading-tight">
-              Preserving local wildlife habitats for generations to come.
-            </h2>
-            <p className="text-sm md:text-base text-foreground/80 leading-relaxed">
-              Founded in 2012 by community naturalists, the Emerald Valley Conservation Trust works at a local grassroots level to address local ecological fragmentation.
+        <div className="relative mx-auto grid max-w-6xl items-center gap-16 px-4 pb-24 pt-16 sm:px-6 lg:grid-cols-[1.15fr_1fr] lg:pb-28 lg:pt-24">
+          <Reveal className="space-y-7">
+            <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white/85 backdrop-blur">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-[#9fd49a]" />
+              Registered Trust · {site.location}
             </p>
-            <p className="text-sm md:text-base text-foreground/80 leading-relaxed">
-              By working closely with local schools, private landowners, and municipal offices, we restore damaged creeks, coordinate garbage cleanup days, and purchase threatened land plots to keep them wild forever.
+            <h1 className="text-[2.7rem] font-bold leading-[1.04] sm:text-6xl lg:text-7xl">
+              We help injured wild animals <span className="text-[#f6c27a]">heal and go home.</span>
+            </h1>
+            <p className="max-w-xl text-lg text-white/80 sm:text-xl">
+              We are a small group of local people in Bakkarwala, Delhi. When a monkey, snake, owl, turtle or bird is
+              hurt, we rescue it, treat it, and release it back into nature once it is healthy.
             </p>
-            <div className="pt-2">
-              <Link
-                href="/about"
-                className="inline-flex items-center space-x-2 text-primary dark:text-primary-light hover:text-accent font-semibold text-sm transition-colors group"
+            <div className="flex flex-col gap-3 pt-1 sm:flex-row">
+              <a
+                href={whatsappUrl()}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 font-semibold text-forest shadow-xl shadow-black/20 transition-transform hover:-translate-y-0.5"
               >
-                <span>Read our full story</span>
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <WhatsAppIcon className="h-5 w-5 text-leaf" />
+                Found an injured animal?
+              </a>
+              <Link
+                href="/help"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-white/10 px-7 py-3.5 font-semibold backdrop-blur transition-colors hover:bg-white/20"
+              >
+                <HeartHandshake className="h-5 w-5 text-[#f6c27a]" />
+                Support our work
               </Link>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div className="bg-card border border-card-border rounded-xl p-6 shadow-sm space-y-3">
-              <div className="p-3 bg-primary/10 rounded-lg text-primary dark:text-primary-light inline-block">
-                <ShieldCheck className="h-6 w-6" />
-              </div>
-              <h3 className="font-serif font-bold text-lg text-foreground">Habitat Conservation</h3>
-              <p className="text-xs text-muted leading-relaxed">
-                Protecting forests, waterways, and valleys from industrial development and logging through physical land purchases and legal easements.
-              </p>
+          <Reveal className="relative mx-auto w-full max-w-[360px]">
+            <div className="rotate-2 rounded-[2.2rem] bg-white/15 p-2.5 shadow-2xl shadow-black/30 backdrop-blur transition-transform duration-500 hover:rotate-0">
+              <ReelEmbed reel={featuredReel} />
             </div>
-            <div className="bg-card border border-card-border rounded-xl p-6 shadow-sm space-y-3">
-              <div className="p-3 bg-primary/10 rounded-lg text-primary dark:text-primary-light inline-block">
-                <Leaf className="h-6 w-6" />
+            <FloatingBadge emoji="🐒" label="Monkeys" className="-left-6 top-10 sm:-left-16" delay={0.3} />
+            <FloatingBadge emoji="🦉" label="Owls" className="-right-3 top-1/3 sm:-right-12" delay={0.6} />
+            <FloatingBadge emoji="🐢" label="Turtles" className="-left-4 bottom-24 sm:-left-14" delay={0.9} />
+            <FloatingBadge emoji="🐍" label="Snakes" className="-right-2 bottom-8 sm:-right-10" delay={1.2} />
+          </Reveal>
+        </div>
+
+        <svg className="absolute -bottom-px left-0 h-12 w-full text-bg sm:h-20" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 80V40c240-40 480-40 720 0s480 40 720 0v40Z" fill="currentColor" />
+        </svg>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+        <Reveal>
+          <SectionHeading eyebrow="Why we do this" title="Every injured animal deserves a second chance." />
+        </Reveal>
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {reasons.map((reason) => (
+            <Reveal key={reason.title}>
+              <div className="card h-full p-8 transition-transform duration-300 hover:-translate-y-1">
+                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-leaf-soft text-2xl" aria-hidden="true">
+                  {reason.emoji}
+                </span>
+                <h3 className="mt-5 text-xl font-bold">{reason.title}</h3>
+                <p className="mt-2 text-muted">{reason.text}</p>
               </div>
-              <h3 className="font-serif font-bold text-lg text-foreground">Local Re-wilding</h3>
-              <p className="text-xs text-muted leading-relaxed">
-                Replanting native plant flora, constructing shelters, and removing man-made barriers to promote natural biodiversity.
-              </p>
-            </div>
-            <div className="bg-card border border-card-border rounded-xl p-6 shadow-sm space-y-3 sm:col-span-2">
-              <div className="p-3 bg-primary/10 rounded-lg text-primary dark:text-primary-light inline-block">
-                <Users className="h-6 w-6" />
-              </div>
-              <h3 className="font-serif font-bold text-lg text-foreground">Community Clean-ups & Education</h3>
-              <p className="text-xs text-muted leading-relaxed">
-                Educating schools, leading weekend volunteer cleanups, and distributing eco-friendly guidelines to neighborhoods bordering reserves.
-              </p>
-            </div>
-          </div>
+            </Reveal>
+          ))}
         </div>
       </section>
 
-      {/* 4. Interactive Map Section */}
-      <section className="py-16 bg-muted-light/35 border-t border-b border-card-border/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <InteractiveMap />
+      <section className="px-4 sm:px-6">
+        <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] bg-forest px-6 py-16 text-white sm:px-12">
+          <Foliage className="text-[#9fd49a]" />
+          <Reveal className="relative">
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#f6c27a]">How it works</p>
+            <h2 className="mt-3 text-3xl font-bold sm:text-4xl">{site.tagline}</h2>
+          </Reveal>
+          <ol className="relative mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {steps.map((step, i) => (
+              <Reveal key={step.title}>
+                <li className="h-full rounded-3xl bg-white/[0.07] p-6 backdrop-blur transition-colors hover:bg-white/[0.12]">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#9fd49a] font-display font-bold text-forest">
+                    {i + 1}
+                  </span>
+                  <h3 className="mt-4 text-2xl font-bold">{step.title}</h3>
+                  <p className="mt-2 text-white/75">{step.text}</p>
+                </li>
+              </Reveal>
+            ))}
+          </ol>
         </div>
       </section>
 
-      {/* 5. Highlight Projects Cards */}
-      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div className="space-y-3">
-            <span className="text-xs font-bold text-accent uppercase tracking-widest bg-accent/10 px-3 py-1 rounded-full">
-              What We Do
-            </span>
-            <h2 className="font-serif text-3xl font-bold text-primary dark:text-primary-light">
-              Current Conservation Campaigns
-            </h2>
-          </div>
-          <Link
-            href="/projects"
-            className="inline-flex items-center space-x-2 text-primary dark:text-primary-light hover:text-accent font-semibold text-sm transition-colors group shrink-0"
-          >
-            <span>See all local initiatives</span>
+      <section className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+        <Reveal className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <SectionHeading eyebrow="Who we help" title="The animals we care for" />
+          <Link href="/animals" className={arrowLink}>
+            What to do if you find one
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {highlights.map((project) => (
-            <div key={project.title} className="bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-md border border-card-border transition-all duration-300 flex flex-col group">
-              <div className="relative h-48 w-full overflow-hidden bg-stone-100">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <span className="absolute top-4 left-4 bg-primary text-white text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-full">
-                  {project.category}
+        </Reveal>
+        <div className="mt-12 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-6">
+          {animals.map((animal) => (
+            <Reveal key={animal.name}>
+              <Link
+                href="/animals"
+                className="card group flex h-full flex-col items-center px-4 py-7 text-center transition-transform duration-300 hover:-translate-y-1.5"
+              >
+                <span className="flex h-20 w-20 items-center justify-center rounded-full bg-leaf-soft text-5xl transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6" aria-hidden="true">
+                  {animal.emoji}
                 </span>
-              </div>
-              <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                <div className="space-y-2">
-                  <h3 className="font-serif font-bold text-lg text-foreground group-hover:text-primary dark:group-hover:text-primary-light transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-xs text-muted leading-relaxed">
-                    {project.description}
-                  </p>
-                </div>
-                <Link
-                  href="/projects"
-                  className="inline-flex items-center space-x-2 text-xs font-bold text-primary dark:text-primary-light hover:text-accent transition-colors pt-2 border-t border-card-border/60"
-                >
-                  <span>Read Updates</span>
-                  <ArrowRight className="h-3 w-3" />
-                </Link>
-              </div>
+                <span className="mt-4 font-display text-lg font-bold">{animal.name}</span>
+                <span className="mt-1 text-sm text-muted">{animal.examples.split(",")[0]}</span>
+              </Link>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-leaf-soft/70 py-24">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <Reveal className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            <SectionHeading
+              eyebrow="Inside the shelter"
+              title="Where animals rest and recover"
+              text="A look at our rooms and the animals currently in our care."
+            />
+            <Link href="/shelter" className={arrowLink}>
+              See the shelter
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </Reveal>
+          <div className="mt-12">
+            <ShelterGrid rooms={shelterRooms} />
+          </div>
+        </div>
+      </section>
+
+      <section className="py-24">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <Reveal className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            <SectionHeading eyebrow="From the field" title="Recent rescues" text="Real rescues, straight from our Instagram." />
+            <Link href="/videos" className={arrowLink}>
+              All videos
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </Reveal>
+        </div>
+        <div className="mx-auto mt-12 flex max-w-6xl snap-x snap-mandatory gap-6 overflow-x-auto px-4 pb-6 sm:px-6 [scrollbar-width:none]">
+          {reels.slice(0, 5).map((reel) => (
+            <div key={reel.code} className="card w-[300px] shrink-0 snap-start p-2 sm:w-[340px]">
+              <ReelEmbed reel={reel} />
             </div>
           ))}
         </div>
       </section>
 
-      {/* 6. Local Volunteer/Donate Banner */}
-      <section className="py-20 bg-primary text-white border-t border-primary-hover">
-        <div className="max-w-4xl mx-auto px-4 text-center space-y-8 animate-fade-in">
-          <h2 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
-            Protecting Emerald Valley Starts in Our Backyards
-          </h2>
-          <p className="text-stone-200 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            As a local grassroots organization, over 90% of our funding goes directly back into buying local forest tracts, restoring salmon spawning beds, and organizing river clean-ups.
-          </p>
-          <div className="flex justify-center pt-4">
-            <Link
-              href="/get-involved"
-              className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-accent hover:bg-accent-hover text-white px-8 py-3.5 rounded-full text-sm font-bold transition-all duration-300 hover:shadow-lg"
-            >
-              <span>Donate Locally</span>
-            </Link>
+      <section className="mx-auto max-w-6xl px-4 sm:px-6">
+        <Reveal>
+          <div className="relative overflow-hidden rounded-[2.5rem] bg-marigold-soft p-8 sm:p-12">
+            <div className="pointer-events-none absolute -right-6 -top-10 text-[10rem] leading-none opacity-10" aria-hidden="true">
+              🐾
+            </div>
+            <div className="relative grid gap-10 lg:grid-cols-2 lg:items-center">
+              <div className="space-y-4">
+                <h2 className="text-3xl font-bold sm:text-4xl">Your help keeps this going.</h2>
+                <p className="text-lg text-muted">
+                  We run on small donations from people like you. Every rupee goes to medicines, food, cages and vet
+                  visits for the animals.
+                </p>
+                <div className="flex flex-wrap items-center gap-4 pt-2">
+                  <CopyUpi />
+                  <Link href="/help" className={arrowLink}>
+                    Scan QR & other ways
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </div>
+              </div>
+              <div className="card p-7 sm:p-8">
+                <p className="font-display text-xl font-bold">Found an injured animal?</p>
+                <ul className="mt-4 space-y-2.5 text-muted">
+                  <li>🚫 Keep people, pets and crowds away.</li>
+                  <li>🥣 Don&apos;t feed it or give water.</li>
+                  <li>🐍 Never try to catch a snake or monkey.</li>
+                  <li>📍 Send us a photo and your location.</li>
+                </ul>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <a
+                    href={whatsappUrl()}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full bg-leaf px-5 py-2.5 font-semibold text-white transition-transform hover:-translate-y-0.5 dark:text-forest"
+                  >
+                    <WhatsAppIcon className="h-4 w-4" />
+                    WhatsApp
+                  </a>
+                  {site.phone && (
+                    <a
+                      href={`tel:${site.phone.replace(/\s/g, "")}`}
+                      className="inline-flex items-center gap-2 rounded-full bg-leaf-soft px-5 py-2.5 font-semibold text-leaf-dark"
+                    >
+                      <Phone className="h-4 w-4" />
+                      {site.phone}
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        </Reveal>
       </section>
-    </div>
+    </>
   );
 }

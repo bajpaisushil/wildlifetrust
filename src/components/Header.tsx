@@ -1,143 +1,96 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { TreePine, Menu, X, Heart } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import WhatsAppIcon from "@/components/WhatsAppIcon";
+import { site, whatsappUrl } from "@/data/site";
+
+const navItems = [
+  { name: "Home", href: "/" },
+  { name: "Animals", href: "/animals" },
+  { name: "Shelter", href: "/shelter" },
+  { name: "Videos", href: "/videos" },
+  { name: "Help Us", href: "/help" },
+  { name: "Contact", href: "/contact" },
+];
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const navItems = [
-    { name: "Home", href: "/" },
-    { name: "About Us", href: "/about" },
-    { name: "Initiatives", href: "/projects" },
-    { name: "Get Involved", href: "/get-involved" },
-    { name: "News", href: "/news" },
-    { name: "Contact", href: "/contact" },
-  ];
-
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "glass-header py-3 shadow-sm"
-          : "bg-transparent py-5 text-white"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 group">
-            <div className="p-2 bg-primary rounded-lg text-white transition-transform group-hover:scale-105 duration-300">
-              <TreePine className="h-6 w-6" />
-            </div>
-            <div className="flex flex-col">
-              <span className={`font-serif font-bold text-lg leading-tight tracking-tight ${isScrolled ? 'text-primary dark:text-primary-light' : 'text-white'}`}>
-                WildTrust
-              </span>
-              <span className={`text-[10px] uppercase tracking-wider font-medium ${isScrolled ? 'text-muted' : 'text-stone-300'}`}>
-                Habitat & Wildlife
-              </span>
-            </div>
-          </Link>
+    <header className="sticky top-0 z-50 bg-bg/80 backdrop-blur-lg">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+        <Link href="/" className="flex items-center gap-3" onClick={() => setIsOpen(false)}>
+          <Image src="/images/logo.jpg" alt="" width={44} height={44} className="rounded-full" />
+          <span className="leading-tight">
+            <span className="block font-display text-base font-bold">{site.shortName}</span>
+            <span className="block text-xs text-muted">{site.location}</span>
+          </span>
+        </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`text-sm font-medium transition-colors relative py-1 ${
-                    isActive
-                      ? (isScrolled ? "text-primary dark:text-primary-light" : "text-accent-light font-semibold")
-                      : (isScrolled ? "text-foreground/80 hover:text-primary dark:hover:text-primary-light" : "text-white/80 hover:text-white")
-                  }`}
-                >
-                  {item.name}
-                  {isActive && (
-                    <span className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-full animate-fade-in ${
-                      isScrolled ? "bg-primary dark:bg-primary-light" : "bg-accent-light"
-                    }`} />
-                  )}
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Action Button */}
-          <div className="hidden md:flex items-center">
+        <nav className="hidden items-center gap-1 lg:flex">
+          {navItems.map((item) => (
             <Link
-              href="/get-involved"
-              className="inline-flex items-center space-x-2 bg-accent hover:bg-accent-hover text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 hover:shadow-md hover:scale-102"
+              key={item.href}
+              href={item.href}
+              className={`rounded-full px-4 py-2 text-[15px] font-medium transition-colors ${
+                pathname === item.href ? "bg-leaf-soft text-leaf-dark" : "text-muted hover:text-ink"
+              }`}
             >
-              <Heart className="h-4 w-4 fill-current" />
-              <span>Donate Now</span>
+              {item.name}
             </Link>
-          </div>
+          ))}
+        </nav>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className={`p-2 focus:outline-none ${isScrolled ? "text-foreground" : "text-white"}`}
-              aria-label="Toggle menu"
-            >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
+        <div className="flex items-center gap-2">
+          <a
+            href={whatsappUrl()}
+            target="_blank"
+            rel="noreferrer"
+            className="hidden items-center gap-2 rounded-full bg-leaf px-4 py-2 text-[15px] font-semibold text-white dark:text-forest transition-transform hover:-translate-y-0.5 sm:inline-flex"
+          >
+            <WhatsAppIcon className="h-4 w-4" />
+            Report a rescue
+          </a>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="rounded-lg p-2 lg:hidden"
+            aria-label="Toggle menu"
+            aria-expanded={isOpen}
+          >
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden glass-header absolute top-full left-0 right-0 py-4 shadow-lg border-t border-card-border animate-fade-in text-foreground">
-          <div className="px-4 space-y-3">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className={`block px-3 py-2 rounded-lg text-base font-medium transition-colors ${
-                    isActive
-                      ? "bg-primary/10 text-primary dark:text-primary-light font-semibold"
-                      : "text-foreground hover:bg-muted-light"
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              );
-            })}
-            <div className="pt-4 border-t border-card-border">
-              <Link
-                href="/get-involved"
-                onClick={() => setIsOpen(false)}
-                className="w-full justify-center inline-flex items-center space-x-2 bg-accent hover:bg-accent-hover text-white px-5 py-3 rounded-full text-base font-semibold transition-all duration-300"
-              >
-                <Heart className="h-5 w-5 fill-current" />
-                <span>Donate Now</span>
-              </Link>
-            </div>
-          </div>
-        </div>
+        <nav className="px-4 pb-4 lg:hidden">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setIsOpen(false)}
+              className={`block rounded-lg px-3 py-2.5 font-medium ${
+                pathname === item.href ? "bg-leaf-soft text-leaf-dark" : ""
+              }`}
+            >
+              {item.name}
+            </Link>
+          ))}
+          <a
+            href={whatsappUrl()}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-2 flex items-center justify-center gap-2 rounded-full bg-leaf px-4 py-3 font-semibold text-white dark:text-forest sm:hidden"
+          >
+            <WhatsAppIcon className="h-4 w-4" />
+            Report a rescue
+          </a>
+        </nav>
       )}
     </header>
   );

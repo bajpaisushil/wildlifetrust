@@ -1,22 +1,24 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Bricolage_Grotesque, Mukta } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-const sans = Inter({
-  variable: "--font-sans",
+const heading = Bricolage_Grotesque({
+  variable: "--font-heading",
   subsets: ["latin"],
 });
 
-const serif = Playfair_Display({
-  variable: "--font-serif",
-  subsets: ["latin"],
+const body = Mukta({
+  variable: "--font-body",
+  subsets: ["latin", "devanagari"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Wildlife & Habitat Trust | Protecting Earth's Ecosystems",
-  description: "The Wildlife & Habitat Trust (WHT) is a leading conservation NGO dedicated to protecting critical ecosystems, restoring habitats, saving endangered species, and empowering local communities.",
+  title: "Wildlife and Habitat Trust of India | Bakkarwala, Delhi",
+  description:
+    "A small registered trust in Bakkarwala, Delhi that rescues and treats injured monkeys, snakes, owls, turtles and birds, and releases them back to the wild.",
 };
 
 export default function RootLayout({
@@ -25,15 +27,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${sans.variable} ${serif.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col bg-background text-foreground transition-colors duration-300">
+    <html lang="en" className={`${heading.variable} ${body.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col text-[17px] leading-relaxed">
         <Header />
-        <main className="flex-grow">
-          {children}
-        </main>
+        <main className="flex-grow">{children}</main>
         <Footer />
       </body>
     </html>
